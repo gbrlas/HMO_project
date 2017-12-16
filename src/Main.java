@@ -1,102 +1,89 @@
-import java.util.Arrays;
-import java.util.Random;
+import models.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
+
+    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts1.txt";
+
+    private static List<Test> tests;
+    private static List<String> machines;
+    private static Map<String, Integer> resourceOccurrences;
+
+    private static int numberOfTests;
+    private static int numberOfMachines;
+    private static int numberOfResources;
+
+    private static final String TEST_NUMBER_KEY = "tests";
+    private static final String MACHINE_NUMBER_KEY = "machines";
+    private static final String RESOURCE_NUMBER_KEY = "resources";
+    private static final String TEST_IDENTIFIER = "test";
+    private static final String MACHINE_IDENTIFIER = "embedded_board";
+    private static final String RESOURCE_IDENTIFIER = "resource";
+
     public static void main(String[] args) {
-        int[][] acceptableTerms = new int[][] {
-                {1},
-                {0, 1, 2, 3, 4},
-                {0, 2},
-                {0, 3, 4},
-                {0, 1, 2}
-        };
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(INPUT_FILE_PATH));
+            tests = new ArrayList<>();
+            machines = new ArrayList<>();
+            resourceOccurrences = new HashMap<>();
 
-        int numberOfCourses = acceptableTerms.length;
-        int numberOfTerms = 5;
+            parse(lines);
 
-        long[] failures = new long[numberOfCourses];
-        for (int i = 0; i < numberOfCourses; i++) {
-            failures[i] = 0;
+            System.out.println(resourceOccurrences);
+        } catch (IOException | NumberFormatException e) {
+            System.out.print("Input file is invalid.");
+            System.exit(-1);
+        }
+    }
+
+    private static void parse(List<String> lines) {
+        for (String line : lines) {
+            if (line.contains(TEST_NUMBER_KEY)) {
+                numberOfTests = Integer.parseInt(line.split(":")[1].trim());
+            } else if (line.contains(MACHINE_NUMBER_KEY)) {
+                numberOfMachines = Integer.parseInt(line.split(":")[1].trim());
+            } else if (line.contains(RESOURCE_NUMBER_KEY)) {
+                numberOfResources = Integer.parseInt(line.split(":")[1].trim());
+            } else if (line.startsWith(TEST_IDENTIFIER)) {
+                Test newTest = parseTestLine(line);
+                tests.add(newTest);
+            } else if (line.startsWith(MACHINE_IDENTIFIER)) {
+                machines.add(line.split("\'")[1].trim());
+            } else if (line.startsWith(RESOURCE_IDENTIFIER)) {
+                String name = line.split("\'")[1].trim();
+                int occurrence = Integer.parseInt(line.substring(line.indexOf(",") + 1, line.indexOf(")")).trim());
+                resourceOccurrences.put(name, occurrence);
+            }
+        }
+    }
+
+    private static Test parseTestLine(String line) {
+        String name = line.split("\'")[1];
+        int duration = Integer.parseInt(line.split(",")[1].trim());
+        String requiredMachinesString = line.substring(line.indexOf("[") + 1, line.indexOf("]"));
+        String resourcesString = line.substring(line.lastIndexOf("[") + 1, line.lastIndexOf("]"));
+
+        List<String> requiredMachines = getRequiredList(requiredMachinesString);
+        List<String> requiredResources = getRequiredList(resourcesString);
+
+        return new Test(name, duration, requiredMachines, requiredResources);
+    }
+
+    private static List<String> getRequiredList(String requiredString) {
+        List<String> newList = new ArrayList<>();
+
+        for (String element : requiredString.split(",")) {
+            element = element.trim().replaceAll("'", "");
+            newList.add(element);
         }
 
-        int[] courseOrder = new int[numberOfCourses];
-        for (int i = 0; i < numberOfCourses; i++) {
-            courseOrder[i]  = i;
-        }
-
-        Random rand = new Random();
-        int[] courseTerm = new int[numberOfCourses];
-        int[] terms = new int[numberOfTerms];
-        int numberOfAttempts = 100000;
-
-        // Pomocno polje za kontrolu odabranih termina
-        boolean[] termUsed = new boolean[numberOfTerms];
-
-        int failuresCount = 0;
-        for (int i = 0; i < numberOfAttempts; i ++) {
-            // Za sve kolegije postavi termine na nevaljale
-            for (int k = 0; k < numberOfCourses; k++) {
-                courseTerm[k] = -1;
-            }
-
-            // Ocisiti zastavice odabranih termina
-            for (int k = 0; k < termUsed.length; k++) {
-                termUsed[k] = false;
-            }
-
-            int failedCourse = -1;
-
-            for (int k = 0; k < numberOfCourses; k++) {
-                int courseIndex = courseOrder[k];
-                int numberOFValidTerms = 0;
-
-                // Pripremi polje s popisom valjalih preostalih termina
-                for (int t = 0; t < acceptableTerms[courseIndex].length; t++) {
-                    if (termUsed[acceptableTerms[courseIndex][t]]) {
-                        continue;
-                    }
-                    terms[numberOFValidTerms] = acceptableTerms[courseIndex][t];
-                    numberOFValidTerms++;
-                }
-
-                // Sada odaberi jedan od tih termina
-                if (numberOFValidTerms == 0) {
-                    failedCourse = courseIndex;
-                    break;
-                }
-
-                int picked = terms[rand.nextInt(numberOFValidTerms)];
-                courseTerm[courseIndex] = picked;
-                termUsed[picked] = true;
-            }
-
-            if (failedCourse == - 1) {
-                failedCourse = check(courseTerm, acceptableTerms);
-            }
-            if (failedCourse != -1) {
-                failuresCount++;
-                failures[failedCourse]++;
-
-                // Pronadji poziciju na kojoj se nalazi kolegij na kojem je puklo
-                int pos = 0;
-                while (courseOrder[pos] != failedCourse) {
-                    pos++;
-                }
-
-                while (pos > 0 && failures[courseOrder[pos]] > failures[courseOrder[pos - 1]]) {
-                    int tmp = courseOrder[pos];
-                    courseOrder[pos] = courseOrder[pos - 1];
-                    courseOrder[pos - 1] = tmp;
-                    pos--;
-                }
-            }
-
-        }
-
-        System.out.println("Uspjesnost stvaranja: " +
-                ((double)(numberOfAttempts - failuresCount) / (double) numberOfAttempts * 100) +
-                "%, broj uspjeha: " + (numberOfAttempts - failuresCount));
-        System.out.println("Poredak kolegija na kraju: " + Arrays.toString(courseOrder) +
-                ", failures=" + Arrays.toString(failures));
+        return newList;
     }
 }
