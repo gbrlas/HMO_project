@@ -11,6 +11,7 @@ import java.util.Map;
 public class FitnessCalculator {
     private static Map<Test, Integer> timeMap;
     private static Map<Test, Integer> machineMap;
+    private static int maxFitness = Integer.MIN_VALUE;
 
     public static int calculateFitness(List<Test> allTests, byte[] genes,
                                        int numberOfBitsForTime, int numberOfBitsForMachines) {
@@ -20,32 +21,35 @@ public class FitnessCalculator {
 
         for (int i = 0; i < allTests.size(); i++) {
             int startIndexInGene = i * (numberOfBitsForTime + numberOfBitsForMachines);
-            int endIndexInGene = startIndexInGene + (numberOfBitsForMachines + numberOfBitsForTime);
 
             timeMap.put(allTests.get(i), MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes, startIndexInGene, startIndexInGene + numberOfBitsForTime)));
             machineMap.put(allTests.get(i), MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes,
                     startIndexInGene + numberOfBitsForTime, startIndexInGene + numberOfBitsForTime + numberOfBitsForMachines)));
 
-            if (testIsSatisfied(allTests.get(i), Arrays.copyOfRange(genes, startIndexInGene, endIndexInGene))) {
+            if (testIsSatisfied(allTests.get(i))) {
                 fitness += 1;
             } else {
-                fitness -= 1;
+                fitness -= 2;
             }
         }
 
+        if (fitness > maxFitness) {
+            maxFitness = fitness;
+        }
 
         return fitness;
     }
 
-    private static boolean testIsSatisfied(Test test, byte[] bytes) {
+    private static boolean testIsSatisfied(Test test) {
         if (timeConflict(test) || incorrectMachine(test)) {
             return false;
         }
 
+        return true;
     }
 
     private static boolean incorrectMachine(Test test) {
-        return !(test.getRequiredMachines().contains("m" + machineMap.get(test)));
+        return !(test.getRequiredMachines().size() == 0 || test.getRequiredMachines().contains("m" + machineMap.get(test)));
     }
 
     private static boolean resourseConflict() {
@@ -67,8 +71,13 @@ public class FitnessCalculator {
                         return true;
                     }
                 }
-                return false;
             }
         }
+
+        return false;
+    }
+
+    public static int getMaxFitness() {
+        return maxFitness;
     }
 }

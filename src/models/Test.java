@@ -48,4 +48,27 @@ public class Test {
     public List<String> getRequiredMachines() {
         return requiredMachines;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Test test = (Test) o;
+
+        if (duration != test.duration) return false;
+        if (name != null ? !name.equals(test.name) : test.name != null) return false;
+        if (requiredMachines != null ? !requiredMachines.equals(test.requiredMachines) : test.requiredMachines != null)
+            return false;
+        return requiredResources != null ? requiredResources.equals(test.requiredResources) : test.requiredResources == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + duration;
+        result = 31 * result + (requiredMachines != null ? requiredMachines.hashCode() : 0);
+        result = 31 * result + (requiredResources != null ? requiredResources.hashCode() : 0);
+        return result;
+    }
 }

@@ -1,4 +1,8 @@
+import genetic_algorithm.Algorithm;
+import genetic_algorithm.FitnessCalculator;
+import genetic_algorithm.Population;
 import models.Test;
+import sun.security.krb5.internal.ktab.KeyTabEntry;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +14,7 @@ import java.util.Map;
 
 public class Main {
 
-    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts1.txt";
+    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/test_example.txt";
 
     private static List<Test> tests;
     private static List<String> machines;
@@ -27,6 +31,14 @@ public class Main {
     private static final String MACHINE_IDENTIFIER = "embedded_board";
     private static final String RESOURCE_IDENTIFIER = "resource";
 
+    private static int lengthOfChromosome;
+    private static int numberOfBitsForTime;
+    private static int numberOfBitsForMachines;
+
+    private static final int MAX_ITERATIONS = 1000;
+    private static final int POPULATION_SIZE = 50;
+
+
     public static void main(String[] args) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(INPUT_FILE_PATH));
@@ -36,11 +48,50 @@ public class Main {
 
             parse(lines);
 
-            System.out.println(resourceOccurrences);
+            numberOfBitsForMachines = log2(numberOfMachines);
+            numberOfBitsForTime = calculateBitsForTime();
+
+            lengthOfChromosome = numberOfTests * (numberOfBitsForMachines + numberOfBitsForTime);
+
+            run();
         } catch (IOException | NumberFormatException e) {
             System.out.print("Input file is invalid.");
             System.exit(-1);
         }
+    }
+
+    private static int calculateBitsForTime() {
+        int totalTime = 0;
+        for (Test test : tests) {
+            totalTime += test.getDuration();
+        }
+
+        return log2(totalTime);
+    }
+
+    private static void run() {
+        Population population = new Population(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, POPULATION_SIZE, true, tests);
+        int iterations = 0;
+
+        System.out.println(population.getPopulationSize());
+
+        while (iterations < MAX_ITERATIONS) {
+            iterations++;
+            System.out.println("Generacija: " + iterations + " Dobrota: " + population.getBestChromosome().getFitness(tests));
+            if (iterations % 50 == 0) {
+                System.out.println(population.getBestChromosome());
+            }
+            population = Algorithm.evolve(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, tests);
+        }
+
+        iterations++;
+
+        System.out.println("Generacija: " + iterations + " Dobrota: " + population.getBestChromosome().getFitness(tests));
+        System.out.println("GOTOVO!");
+        System.out.println("Generacija: " + iterations);
+        System.out.println("Genom:");
+        System.out.println(population.getBestChromosome());
+
     }
 
     private static void parse(List<String> lines) {
@@ -85,5 +136,9 @@ public class Main {
         }
 
         return newList;
+    }
+
+    private static int log2(int value) {
+        return Integer.SIZE-Integer.numberOfLeadingZeros(value);
     }
 }

@@ -1,5 +1,9 @@
 package genetic_algorithm;
 
+import models.Test;
+
+import java.util.List;
+
 public class Algorithm {
 
     /**
@@ -9,13 +13,16 @@ public class Algorithm {
     private static final double mutation = 0.015;
     private static final int sizeOfTournamentSelection = 3;
     private static final boolean elitism = true;
+    private static List<Test> tests;
 
     /**
      * Method evolves given population
      */
-    public static Population evoluiraj(Population population, int lengthOfChromosome) {
-        Population newPopulation = new Population(lengthOfChromosome,
-                population.getPopulationSize(), false);
+    public static Population evolve(Population population, int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines, List<Test> testList) {
+        tests = testList;
+        Population newPopulation = new Population(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines,
+                population.getPopulationSize(), false, tests);
+
 
         // if elitism is ON, then we skip first chromosome (best one)
         // this variable is actually an offset included in for loop
@@ -29,9 +36,9 @@ public class Algorithm {
 
         // tournament selection -> crossover
         for (int i = skipFirstChromosome; i < population.getPopulationSize(); i++) {
-            TestChromosome mom = tournamentSelection(population, lengthOfChromosome);
-            TestChromosome dad = tournamentSelection(population, lengthOfChromosome);
-            TestChromosome newChild = crossover(mom, dad, lengthOfChromosome);
+            TestChromosome mom = tournamentSelection(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
+            TestChromosome dad = tournamentSelection(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
+            TestChromosome newChild = crossover(mom, dad, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
             newPopulation.setChromosome(newChild, i);
         }
 
@@ -45,8 +52,8 @@ public class Algorithm {
         return newPopulation;
     }
 
-    private static TestChromosome crossover(TestChromosome mom, TestChromosome dad, int lengthOfChromosome) {
-        TestChromosome newChild = new TestChromosome(lengthOfChromosome);
+    private static TestChromosome crossover(TestChromosome mom, TestChromosome dad, int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines) {
+        TestChromosome newChild = new TestChromosome(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
         for (int i = 0; i < mom.getSize(); i++) {
             if (Math.random() <= parentProbability) {
                 newChild.setGene(i, mom.getGene(i));
@@ -66,8 +73,8 @@ public class Algorithm {
         }
     }
 
-    private static TestChromosome tournamentSelection(Population population, int lengthOfChromosome) {
-        Population tournamentPopulation = new Population(lengthOfChromosome, sizeOfTournamentSelection, false);
+    private static TestChromosome tournamentSelection(Population population, int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines) {
+        Population tournamentPopulation = new Population(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, sizeOfTournamentSelection, false, tests);
         for (int i = 0; i < sizeOfTournamentSelection; i++) {
             int index = (int) (Math.random() * population.getPopulationSize());
             tournamentPopulation.setChromosome(population.getChromosome(index), i);
