@@ -40,6 +40,8 @@ public class Algorithm {
             mutate(newPopulation.getChromosome(i));
         }
 
+        newPopulation.adjustTime();
+
         return newPopulation;
     }
 

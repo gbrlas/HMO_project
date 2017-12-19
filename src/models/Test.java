@@ -40,4 +40,12 @@ public class Test {
         return String.format("\'%s\', %d, required machines: %s, resources: %s",
                 name, duration, requiredMachinesString, requiredResourcesString);
     }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public List<String> getRequiredMachines() {
+        return requiredMachines;
+    }
 }
