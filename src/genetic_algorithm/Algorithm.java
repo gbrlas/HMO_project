@@ -53,7 +53,7 @@ public class Algorithm {
     }
 
     private static TestChromosome crossover(TestChromosome mom, TestChromosome dad, int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines) {
-        TestChromosome newChild = new TestChromosome(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
+        TestChromosome newChild = new TestChromosome(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, tests);
         for (int i = 0; i < mom.getSize(); i++) {
             if (Math.random() <= parentProbability) {
                 newChild.setGene(i, mom.getGene(i));

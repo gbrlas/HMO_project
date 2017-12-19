@@ -29,7 +29,7 @@ public class FitnessCalculator {
             if (testIsSatisfied(allTests.get(i))) {
                 fitness += 1;
             } else {
-                fitness -= 2;
+                fitness -= 3;
             }
         }
 

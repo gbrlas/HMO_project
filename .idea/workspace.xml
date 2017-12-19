@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b5562680-9fd7-4d49-b11e-1954897df7d5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java" afterPath="$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java" afterPath="$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/genetic_algorithm/Population.java" afterPath="$PROJECT_DIR$/src/genetic_algorithm/Population.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/genetic_algorithm/TestChromosome.java" afterPath="$PROJECT_DIR$/src/genetic_algorithm/TestChromosome.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models/Test.java" afterPath="$PROJECT_DIR$/src/models/Test.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -61,8 +59,8 @@
       <file leaf-file-name="TestChromosome.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/TestChromosome.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="98" column="43" lean-forward="false" selection-start-line="98" selection-start-column="43" selection-end-line="98" selection-end-column="43" />
+            <state relative-caret-position="469">
+              <caret line="102" column="141" lean-forward="false" selection-start-line="102" selection-start-column="141" selection-end-line="102" selection-end-column="141" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -73,8 +71,8 @@
       <file leaf-file-name="Population.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/Population.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="28" column="26" lean-forward="false" selection-start-line="28" selection-start-column="26" selection-end-line="28" selection-end-column="26" />
+            <state relative-caret-position="241">
+              <caret line="17" column="141" lean-forward="false" selection-start-line="17" selection-start-column="141" selection-end-line="17" selection-end-column="141" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -85,8 +83,8 @@
       <file leaf-file-name="Algorithm.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+            <state relative-caret-position="551">
+              <caret line="55" column="124" lean-forward="false" selection-start-line="55" selection-start-column="124" selection-end-line="55" selection-end-column="124" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -97,8 +95,8 @@
       <file leaf-file-name="FitnessCalculator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="31" column="29" lean-forward="true" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
+            <state relative-caret-position="375">
+              <caret line="31" column="28" lean-forward="false" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
               <folding>
                 <element signature="e#1844#1845#0" expanded="true" />
                 <element signature="e#1872#1873#0" expanded="true" />
@@ -151,10 +149,10 @@
         <option value="$PROJECT_DIR$/src/models/TestChromosome.java" />
         <option value="$PROJECT_DIR$/src/utils/MathHelper.java" />
         <option value="$PROJECT_DIR$/src/models/Test.java" />
-        <option value="$PROJECT_DIR$/src/genetic_algorithm/Population.java" />
-        <option value="$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java" />
-        <option value="$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
+        <option value="$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java" />
+        <option value="$PROJECT_DIR$/src/genetic_algorithm/Population.java" />
+        <option value="$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java" />
         <option value="$PROJECT_DIR$/src/genetic_algorithm/TestChromosome.java" />
       </list>
     </option>
@@ -318,12 +316,12 @@
       <updated>1512655927190</updated>
       <workItem from="1512655931209" duration="1011000" />
       <workItem from="1513602837615" duration="60000" />
-      <workItem from="1513691633826" duration="5825000" />
+      <workItem from="1513691633826" duration="6120000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6896000" />
+    <option name="totallyTimeSpent" value="7191000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1200" extended-state="0" />
@@ -515,39 +513,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/Population.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="28" column="26" lean-forward="false" selection-start-line="28" selection-start-column="26" selection-end-line="28" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="31" column="29" lean-forward="true" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
-          <folding>
-            <element signature="e#1844#1845#0" expanded="true" />
-            <element signature="e#1872#1873#0" expanded="true" />
-            <element signature="e#2656#2657#0" expanded="true" />
-            <element signature="e#2689#2690#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1001">
@@ -560,10 +525,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/FitnessCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="31" column="28" lean-forward="false" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+          <folding>
+            <element signature="e#1844#1845#0" expanded="true" />
+            <element signature="e#1872#1873#0" expanded="true" />
+            <element signature="e#2656#2657#0" expanded="true" />
+            <element signature="e#2689#2690#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/Population.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="17" column="141" lean-forward="false" selection-start-line="17" selection-start-column="141" selection-end-line="17" selection-end-column="141" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/Algorithm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="55" column="124" lean-forward="false" selection-start-line="55" selection-start-column="124" selection-end-line="55" selection-end-column="124" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/genetic_algorithm/TestChromosome.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="98" column="43" lean-forward="false" selection-start-line="98" selection-start-column="43" selection-end-line="98" selection-end-column="43" />
+        <state relative-caret-position="469">
+          <caret line="102" column="141" lean-forward="false" selection-start-line="102" selection-start-column="141" selection-end-line="102" selection-end-column="141" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

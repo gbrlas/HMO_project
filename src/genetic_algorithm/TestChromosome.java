@@ -52,10 +52,11 @@ public class TestChromosome {
 
     private int numberOfBitsForTime;
     private int numberOfBitsForMachines;
+    private List<Test> tests;
 
     private int numberOfTests;
 
-    public TestChromosome(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines) {
+    public TestChromosome(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines, List<Test> tests) {
         this.lengthOfChromosome = lengthOfChromosome;
         this.genes = new byte[lengthOfChromosome];
 
@@ -63,6 +64,7 @@ public class TestChromosome {
         this.numberOfBitsForMachines = numberOfBitsForMachines;
 
         this.numberOfTests = lengthOfChromosome / (numberOfBitsForMachines + numberOfBitsForTime);
+        this.tests = tests;
 
         initializeGenome();
     }
@@ -98,7 +100,8 @@ public class TestChromosome {
             int startIndexInGene = i * (numberOfBitsForTime + numberOfBitsForMachines);
             builder.append("Task t" + (i+1) + "\t" + "Starting time: " + MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes, startIndexInGene, startIndexInGene + numberOfBitsForTime)) +
                     "\t" + "Machine: " + (MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes,
-                    startIndexInGene + numberOfBitsForTime, startIndexInGene + numberOfBitsForTime + numberOfBitsForMachines)) + 1) + "\n");
+                    startIndexInGene + numberOfBitsForTime, startIndexInGene + numberOfBitsForTime + numberOfBitsForMachines)) + 1) + "\t" + 
+                    "Duration: " + tests.get(i).getDuration() + "\n");
         }
 
         builder.append("\n");

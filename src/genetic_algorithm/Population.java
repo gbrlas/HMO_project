@@ -15,7 +15,7 @@ public class Population {
 
         if (initialize) {
             for (int i = 0; i < chromosomes.length; i++) {
-                TestChromosome newTestChromosome = new TestChromosome(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
+                TestChromosome newTestChromosome = new TestChromosome(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, tests);
                 chromosomes[i] = newTestChromosome;
             }
         }
