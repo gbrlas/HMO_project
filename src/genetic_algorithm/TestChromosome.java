@@ -1,5 +1,11 @@
 package genetic_algorithm;
 
+import models.Test;
+import utils.MathHelper;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * One chromosome represents one possible solution.
  * So it must contain all tests and their values for current given solution.
@@ -43,19 +49,22 @@ public class TestChromosome {
 
     private int lengthOfChromosome;
     private byte[] genes;
-    private int fitness;
 
     private int numberOfBitsForTime;
     private int numberOfBitsForMachines;
+    private List<Test> tests;
 
-    public TestChromosome(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines) {
+    private int numberOfTests;
+
+    public TestChromosome(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines, List<Test> tests) {
         this.lengthOfChromosome = lengthOfChromosome;
         this.genes = new byte[lengthOfChromosome];
 
         this.numberOfBitsForTime = numberOfBitsForTime;
         this.numberOfBitsForMachines = numberOfBitsForMachines;
 
-        fitness = 0;
+        this.numberOfTests = lengthOfChromosome / (numberOfBitsForMachines + numberOfBitsForTime);
+        this.tests = tests;
 
         initializeGenome();
     }
@@ -75,11 +84,28 @@ public class TestChromosome {
         genes[index] = value;
     }
 
-    public int getFitness() {
-        return 0;
+    public int getFitness(List<Test> tests) {
+        return FitnessCalculator.calculateFitness(tests, genes, numberOfBitsForTime, numberOfBitsForMachines);
     }
 
     public int getSize() {
         return lengthOfChromosome;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < numberOfTests; i++) {
+            int startIndexInGene = i * (numberOfBitsForTime + numberOfBitsForMachines);
+            builder.append("Task t" + (i+1) + "\t" + "Starting time: " + MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes, startIndexInGene, startIndexInGene + numberOfBitsForTime)) +
+                    "\t" + "Machine: " + (MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes,
+                    startIndexInGene + numberOfBitsForTime, startIndexInGene + numberOfBitsForTime + numberOfBitsForMachines)) + 1) + "\t" + 
+                    "Duration: " + tests.get(i).getDuration() + "\n");
+        }
+
+        builder.append("\n");
+
+        return builder.toString();
     }
 }
