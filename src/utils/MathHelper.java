@@ -20,4 +20,8 @@ public class MathHelper {
 
         return number;
     }
+
+    public static int log2(int value) {
+        return Integer.SIZE-Integer.numberOfLeadingZeros(value);
+    }
 }

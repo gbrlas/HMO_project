@@ -1,10 +1,14 @@
 package genetic_algorithm;
 
+import demo.Main;
 import models.Test;
+import utils.ChromosomeUtils;
 import utils.MathHelper;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static demo.Main.lengthOfOneTest;
 
 /**
  * One chromosome represents one possible solution.
@@ -54,8 +58,6 @@ public class TestChromosome {
     private int numberOfBitsForMachines;
     private List<Test> tests;
 
-    private int numberOfTests;
-
     public TestChromosome(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines, List<Test> tests) {
         this.lengthOfChromosome = lengthOfChromosome;
         this.genes = new byte[lengthOfChromosome];
@@ -63,7 +65,6 @@ public class TestChromosome {
         this.numberOfBitsForTime = numberOfBitsForTime;
         this.numberOfBitsForMachines = numberOfBitsForMachines;
 
-        this.numberOfTests = lengthOfChromosome / (numberOfBitsForMachines + numberOfBitsForTime);
         this.tests = tests;
 
         initializeGenome();
@@ -84,8 +85,8 @@ public class TestChromosome {
         genes[index] = value;
     }
 
-    public int getFitness(List<Test> tests) {
-        return FitnessCalculator.calculateFitness(tests, genes, numberOfBitsForTime, numberOfBitsForMachines);
+    public double getFitness(List<Test> tests) {
+        return FitnessCalculator.calculateFitness(tests, genes);
     }
 
     public int getSize() {
@@ -96,16 +97,17 @@ public class TestChromosome {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < numberOfTests; i++) {
-            int startIndexInGene = i * (numberOfBitsForTime + numberOfBitsForMachines);
-            builder.append("Task t" + (i+1) + "\t" + "Starting time: " + MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes, startIndexInGene, startIndexInGene + numberOfBitsForTime)) +
-                    "\t" + "Machine: " + (MathHelper.getIntFromByteBinary(Arrays.copyOfRange(genes,
-                    startIndexInGene + numberOfBitsForTime, startIndexInGene + numberOfBitsForTime + numberOfBitsForMachines)) + 1) + "\t" + 
+        for (int i = 0; i < tests.size(); i++) {
+            int startIndexInGene = i * lengthOfOneTest;
+            int startingTime = ChromosomeUtils.getStartingTime(genes,startIndexInGene);
+            int machine = ChromosomeUtils.getMachine(genes, startIndexInGene);
+
+            builder.append("Task t" + (i+1) + "\t" + "Starting time: " + startingTime +
+                    "\t" + "Machine: " + machine + "\t" +
                     "Duration: " + tests.get(i).getDuration() + "\n");
         }
 
         builder.append("\n");
-
         return builder.toString();
     }
 }

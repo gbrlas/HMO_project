@@ -10,7 +10,7 @@ public class Algorithm {
      *  GA parameters
      */
     private static final double parentProbability = 0.5;
-    private static final double mutation = 0.015;
+    public static double mutation = 0.15;
     private static final int sizeOfTournamentSelection = 3;
     private static final boolean elitism = true;
     private static List<Test> tests;
@@ -18,7 +18,8 @@ public class Algorithm {
     /**
      * Method evolves given population
      */
-    public static Population evolve(Population population, int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines, List<Test> testList) {
+    public static Population evolve(Population population, int lengthOfChromosome, int numberOfBitsForTime,
+                                    int numberOfBitsForMachines, List<Test> testList) {
         tests = testList;
         Population newPopulation = new Population(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines,
                 population.getPopulationSize(), false, tests);
@@ -35,19 +36,14 @@ public class Algorithm {
         }
 
         // tournament selection -> crossover
+        // and mutation
         for (int i = skipFirstChromosome; i < population.getPopulationSize(); i++) {
             TestChromosome mom = tournamentSelection(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
             TestChromosome dad = tournamentSelection(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
             TestChromosome newChild = crossover(mom, dad, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines);
+            mutate(newChild);
             newPopulation.setChromosome(newChild, i);
         }
-
-        // mutation
-        for (int i = skipFirstChromosome; i < newPopulation.getPopulationSize(); i++) {
-            mutate(newPopulation.getChromosome(i));
-        }
-
-        newPopulation.adjustTime();
 
         return newPopulation;
     }

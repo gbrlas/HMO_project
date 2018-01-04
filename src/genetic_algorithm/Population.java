@@ -6,10 +6,17 @@ import java.util.List;
 
 public class Population {
 
+    /**
+     * Chromosomes from population
+     */
     private TestChromosome[] chromosomes;
+    /**
+     * Tests from input file
+     */
     private List<Test> tests;
 
-    public Population(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines, int sizeOfPopulation, boolean initialize, List<Test> tests) {
+    public Population(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines,
+                      int sizeOfPopulation, boolean initialize, List<Test> tests) {
         chromosomes = new TestChromosome[sizeOfPopulation];
         this.tests = tests;
 
@@ -29,7 +36,7 @@ public class Population {
     public TestChromosome getBestChromosome() {
         TestChromosome bestUnit = chromosomes[0];
         for (int i = 0; i < chromosomes.length; i++) {
-            if (bestUnit.getFitness(tests) <= chromosomes[i].getFitness(tests)) {
+            if (chromosomes[i].getFitness(tests) > bestUnit.getFitness(tests)) {
                 bestUnit = chromosomes[i];
             }
         }
@@ -46,9 +53,5 @@ public class Population {
 
     public TestChromosome getChromosome(int index) {
         return chromosomes[index];
-    }
-
-    public void adjustTime() {
-
     }
 }

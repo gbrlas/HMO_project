@@ -32,6 +32,10 @@ public class Test {
         this.requiredResources = requiredResources;
     }
 
+    public List<String> getRequiredResources() {
+        return requiredResources;
+    }
+
     @Override
     public String toString() {
         String requiredMachinesString = String.join(",", requiredMachines);
