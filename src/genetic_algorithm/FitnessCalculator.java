@@ -3,13 +3,11 @@ package genetic_algorithm;
 import models.Test;
 import utils.ChromosomeUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.*;
 
-import static demo.Main.lengthOfOneTest;
-import static demo.Main.numberOfMachines;
+import static demo.Main.*;
 
 public class FitnessCalculator {
     /**
@@ -38,77 +36,64 @@ public class FitnessCalculator {
             currentMachineMap.put(tests.get(i), ChromosomeUtils.getMachine(genes, startIndexInGene));
 
             if (testIsNotSatisfied(tests.get(i))) {
-                fitness -= 100;
+                fitness -= 1000;
             } else {
-                fitness += 2;
+                fitness += 10;
             }
         }
 
-        fitness /= (punishLongerSolutionsOnDifferentMachines(tests));
+        fitness /= punishLongerSolutionsOnDifferentMachines(tests);
+
 
         return fitness;
-    }
-
-    private static int punishLongerSolutions(List<Test> tests) {
-        int maxDuration = Integer.MIN_VALUE;
-
-        for (Test test : tests) {
-            int duration = currentTimeMap.get(test) + test.getDuration();
-            if (duration > maxDuration) {
-                maxDuration = duration;
-            }
-        }
-
-        return maxDuration;
     }
 
     private static int punishLongerSolutionsOnDifferentMachines(List<Test> tests) {
         int[] maxDurationsPerMachine = new int[numberOfMachines];
 
-        for (int i = 0; i < numberOfMachines; i++) {
-            maxDurationsPerMachine[i] = Integer.MIN_VALUE;
-        }
 
+        int zeros = 0;
+        int punishmentFactor = 0;
 
         for (Test test : tests) {
+            int machine = currentMachineMap.get(test);
             int duration = currentTimeMap.get(test) + test.getDuration();
-            if (duration > maxDurationsPerMachine[currentMachineMap.get(test) - 1]) {
-                maxDurationsPerMachine[currentMachineMap.get(test) - 1] = duration;
+            if (duration > maxDurationsPerMachine[machine - 1]) {
+                maxDurationsPerMachine[machine - 1] = duration;
+            }
+
+
+            if (currentTimeMap.get(test) == 0) {
+                zeros++;
+            }
+
+            if (currentTimeMap.get(test) >= (totalTimeWorstScenario / numberOfMachines)) {
+                punishmentFactor += 5;
             }
         }
+
 
         int maxDuration = 0;
         for (int i = 0; i < numberOfMachines; i++) {
             maxDuration += maxDurationsPerMachine[i];
         }
 
+
+        if (zeros < numberOfMachines) {
+            maxDuration *= (2 * (numberOfMachines - zeros));
+        }
+
+        if (punishmentFactor != 0) {
+            return maxDuration * punishmentFactor;
+        }
         return maxDuration;
     }
 
 
     private static boolean testIsNotSatisfied(Test test) {
-        return timeConflict(test) || incorrectMachine(test) || resourceConflict(test);
-
+        return timeConflict(test) || incorrectMachine(test);
     }
 
-    private static boolean resourceConflict(Test test) {
-        for (Map.Entry<Test, Integer> entry : currentTimeMap.entrySet()) {
-            if (entry.getKey().equals(test)) {
-                continue;
-            } else {
-                if (otherTestHasSameResourceAsMe(test, entry.getKey())) {
-                    if ((entry.getValue() >= currentTimeMap.get(test)
-                            && entry.getValue() < currentTimeMap.get(test) + test.getDuration()) ||
-                            (currentTimeMap.get(test) >= entry.getValue()
-                                    && currentTimeMap.get(test) < entry.getValue() + entry.getKey().getDuration())) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
 
     private static boolean otherTestHasSameResourceAsMe(Test currentTest, Test otherTest) {
         List<String> currentResources = currentTest.getRequiredResources();
@@ -150,7 +135,7 @@ public class FitnessCalculator {
             if (entry.getKey().equals(test)) {
                 continue;
             } else {
-                if (machineConflict(test, entry.getKey())) {
+                if (machineConflict(test, entry.getKey()) || otherTestHasSameResourceAsMe(test, entry.getKey())) {
                     if ((entry.getValue() >= currentTimeMap.get(test)
                             && entry.getValue() < currentTimeMap.get(test) + test.getDuration()) ||
                             (currentTimeMap.get(test) >= entry.getValue()

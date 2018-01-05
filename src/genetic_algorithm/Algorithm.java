@@ -10,7 +10,7 @@ public class Algorithm {
      *  GA parameters
      */
     private static final double parentProbability = 0.5;
-    public static double mutation = 0.15;
+    public static double mutation = 0.3;
     private static final int sizeOfTournamentSelection = 3;
     private static final boolean elitism = true;
     private static List<Test> tests;

@@ -16,11 +16,12 @@ import java.util.Map;
 
 public class Main {
 
-    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/test_example_from_UPUTAA.txt";
+    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/test_example.txt";
 
     private static List<Test> tests;
     private static List<String> machines;
     private static Map<String, Integer> resourceOccurrences;
+    public static Map<String, ArrayList<Test>> resourceUsages;
 
     private static int numberOfTests;
     public static int numberOfMachines;
@@ -42,8 +43,8 @@ public class Main {
     /**
      * Hyper parameters
      */
-    private static final int MAX_ITERATIONS = 100000;
-    private static final int POPULATION_SIZE = 70;
+    private static final int MAX_ITERATIONS = 30000;
+    private static final int POPULATION_SIZE = 20;
 
 
     public static void main(String[] args) {
@@ -52,6 +53,7 @@ public class Main {
             tests = new ArrayList<>();
             machines = new ArrayList<>();
             resourceOccurrences = new HashMap<>();
+            resourceUsages = new HashMap<>();
 
             parse(lines);
 
@@ -89,17 +91,21 @@ public class Main {
         int iterations = 0;
 
         System.out.println("Size of population: " + population.getPopulationSize());
+        System.out.println("Worst time scenario: " + totalTimeWorstScenario);
 
         while (iterations < MAX_ITERATIONS) {
             iterations++;
-            System.out.println("Generation: " + iterations + " Fitness: " + population.getBestChromosome().getFitness(tests));
-            if (iterations % 50 == 0) {
+
+            if (iterations % 1000 == 0) {
+                System.out.println("Generation: " + iterations + " Fitness: " + population.getBestChromosome().getFitness(tests));
                 System.out.println(population.getBestChromosome());
             }
             population = Algorithm.evolve(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, tests);
 
-            if (iterations >= MAX_ITERATIONS / 2) {
-                Algorithm.mutation = 0.2;
+            if (iterations >= ((double) MAX_ITERATIONS / 3) * 2) {
+                Algorithm.mutation = 0.5;
+            } else if (iterations >=  ((double) MAX_ITERATIONS / 3)) {
+                Algorithm.mutation = 0.7;
             }
         }
 
@@ -144,7 +150,19 @@ public class Main {
         List<String> requiredMachines = getRequiredList(requiredMachinesString);
         List<String> requiredResources = getRequiredList(resourcesString);
 
-        return new Test(name, duration, requiredMachines, requiredResources);
+        Test newTest = new Test(name, duration, requiredMachines, requiredResources);
+
+        for (String resource : requiredResources) {
+            if (resourceUsages.containsKey(resource)) {
+                resourceUsages.get(resource).add(newTest);
+            } else {
+                ArrayList<Test> testsForCurrentResource= new ArrayList<>();
+                testsForCurrentResource.add(newTest);
+                resourceUsages.put(resource, testsForCurrentResource);
+            }
+        }
+
+        return newTest;
     }
 
     private static List<String> getRequiredList(String requiredString) {

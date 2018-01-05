@@ -2,15 +2,13 @@
 % Number of machines               : 3
 % Number of resources              : 0
 
-test( 't1', 10, [], ['r1']).
-test( 't2', 5, ['m1'], ['r1']).
-test( 't3', 12, ['m1', 'm2'], ['r1']).
-test( 't4', 2, ['m1', 'm2'], ['r1']).
-test( 't5', 12, ['m2', 'm3'], ['r1']).
+test( 't1', 10, [], []).
+test( 't2', 5, ['m1'], []).
+test( 't3', 12, ['m1', 'm2'], []).
+test( 't4', 2, ['m1', 'm2'], []).
+test( 't5', 12, ['m2', 'm3'], []).
 
 embedded_board( 'm1').
 embedded_board( 'm2').
 embedded_board( 'm3').
 
-resource( 'r1', 1).
-resource( 'r2', 1).
