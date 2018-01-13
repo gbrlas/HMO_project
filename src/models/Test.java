@@ -16,6 +16,10 @@ public class Test {
         this.requiredResources = requiredResources;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

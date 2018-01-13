@@ -1,10 +1,9 @@
 package demo;
 
 import genetic_algorithm.Algorithm;
+import genetic_algorithm.Permutation;
 import genetic_algorithm.Population;
-import genetic_algorithm.TestChromosome;
 import models.Test;
-import utils.MathHelper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,17 +15,15 @@ import java.util.Map;
 
 public class Main {
 
-    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/test_example.txt";
+    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts10.txt";
 
-    private static List<Test> tests;
-    private static List<String> machines;
-    private static Map<String, Integer> resourceOccurrences;
-    public static Map<String, ArrayList<Test>> resourceUsages;
+    public static List<Test> tests;
+    public static List<String> machines;
+    public static Map<String, Integer> resourceOccurrences;
 
     private static int numberOfTests;
     public static int numberOfMachines;
-    public static int totalTimeWorstScenario;
-    public static int numberOfResources;
+    private static int numberOfResources;
 
     private static final String TEST_NUMBER_KEY = "tests";
     private static final String MACHINE_NUMBER_KEY = "machines";
@@ -35,16 +32,11 @@ public class Main {
     private static final String MACHINE_IDENTIFIER = "embedded_board";
     private static final String RESOURCE_IDENTIFIER = "resource";
 
-    public static int lengthOfChromosome;
-    public static int numberOfBitsForTime;
-    public static int numberOfBitsForMachines;
-    public static int lengthOfOneTest;
-
     /**
      * Hyper parameters
      */
-    private static final int MAX_ITERATIONS = 30000;
-    private static final int POPULATION_SIZE = 20;
+    private static final int MAX_ITERATIONS = 10000;
+    public static final int POPULATION_SIZE = 30;
 
 
     public static void main(String[] args) {
@@ -53,15 +45,8 @@ public class Main {
             tests = new ArrayList<>();
             machines = new ArrayList<>();
             resourceOccurrences = new HashMap<>();
-            resourceUsages = new HashMap<>();
 
             parse(lines);
-
-            numberOfBitsForMachines = MathHelper.log2(numberOfMachines);
-            numberOfBitsForTime = calculateBitsForTime();
-
-            lengthOfOneTest = numberOfBitsForMachines + numberOfBitsForTime;
-            lengthOfChromosome = numberOfTests * lengthOfOneTest;
 
             run();
         } catch (IOException | NumberFormatException e) {
@@ -70,53 +55,32 @@ public class Main {
         }
     }
 
-    /**
-     * Method sums durations of all tests and
-     * returns number of bits needed to represent that duration.
-     * It is the worst case solution.
-     */
-    private static int calculateBitsForTime() {
-        int totalTime = 0;
-        for (Test test : tests) {
-            totalTime += test.getDuration();
-        }
-
-        totalTimeWorstScenario = totalTime;
-        return MathHelper.log2(totalTime);
-    }
-
     private static void run() {
-        Population population = new Population(lengthOfChromosome, numberOfBitsForTime,
-                numberOfBitsForMachines, POPULATION_SIZE, true, tests);
+        Population population = new Population(POPULATION_SIZE, numberOfTests);
         int iterations = 0;
 
         System.out.println("Size of population: " + population.getPopulationSize());
-        System.out.println("Worst time scenario: " + totalTimeWorstScenario);
 
         while (iterations < MAX_ITERATIONS) {
             iterations++;
 
-            if (iterations % 1000 == 0) {
-                System.out.println("Generation: " + iterations + " Fitness: " + population.getBestChromosome().getFitness(tests));
-                System.out.println(population.getBestChromosome());
-            }
-            population = Algorithm.evolve(population, lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, tests);
+            population = Algorithm.evolve(population, numberOfTests);
+            population.decodeAllChromosomes();
 
-            if (iterations >= ((double) MAX_ITERATIONS / 3) * 2) {
-                Algorithm.mutation = 0.5;
-            } else if (iterations >=  ((double) MAX_ITERATIONS / 3)) {
-                Algorithm.mutation = 0.7;
+            if (iterations % 100 == 0) {
+                System.out.println(population.getBestChromosome().getOutput());
+                System.out.println("Generation: " + iterations + " Fitness: " + population.getBestChromosome().getFitness());
             }
         }
 
-        TestChromosome best = population.getBestChromosome();
+        Permutation best = population.getBestChromosome();
 
 
         System.out.println("FINISHED!");
         System.out.println("Generation: " + iterations);
         System.out.println("Genome:");
-        System.out.println(best);
-        System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness(tests));
+        System.out.println(best.getOutput());
+        System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
 
     }
 
@@ -150,19 +114,7 @@ public class Main {
         List<String> requiredMachines = getRequiredList(requiredMachinesString);
         List<String> requiredResources = getRequiredList(resourcesString);
 
-        Test newTest = new Test(name, duration, requiredMachines, requiredResources);
-
-        for (String resource : requiredResources) {
-            if (resourceUsages.containsKey(resource)) {
-                resourceUsages.get(resource).add(newTest);
-            } else {
-                ArrayList<Test> testsForCurrentResource= new ArrayList<>();
-                testsForCurrentResource.add(newTest);
-                resourceUsages.put(resource, testsForCurrentResource);
-            }
-        }
-
-        return newTest;
+        return new Test(name, duration, requiredMachines, requiredResources);
     }
 
     private static List<String> getRequiredList(String requiredString) {

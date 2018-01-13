@@ -1,45 +1,31 @@
 package genetic_algorithm;
 
-import models.Test;
-
-import java.util.List;
-
 public class Population {
 
     /**
      * Chromosomes from population
      */
-    private TestChromosome[] chromosomes;
-    /**
-     * Tests from input file
-     */
-    private List<Test> tests;
+    private Permutation[] chromosomes;
 
-    public Population(int lengthOfChromosome, int numberOfBitsForTime, int numberOfBitsForMachines,
-                      int sizeOfPopulation, boolean initialize, List<Test> tests) {
-        chromosomes = new TestChromosome[sizeOfPopulation];
-        this.tests = tests;
+    public Population(int populationSize, int lengthOfChromosome ) {
+        this.chromosomes = new Permutation[populationSize];
 
-        if (initialize) {
-            for (int i = 0; i < chromosomes.length; i++) {
-                TestChromosome newTestChromosome = new TestChromosome(lengthOfChromosome, numberOfBitsForTime, numberOfBitsForMachines, tests);
-                chromosomes[i] = newTestChromosome;
-            }
+        for (int i=0; i < populationSize;i++) {
+            chromosomes[i] = new Permutation(lengthOfChromosome);
         }
-
-
     }
 
     /**
      * Method returns best chromosome by calculating fitness
      */
-    public TestChromosome getBestChromosome() {
-        TestChromosome bestUnit = chromosomes[0];
+    public Permutation getBestChromosome() {
+        Permutation bestUnit = chromosomes[0];
         for (int i = 0; i < chromosomes.length; i++) {
-            if (chromosomes[i].getFitness(tests) > bestUnit.getFitness(tests)) {
+            if (chromosomes[i].getFitness() < bestUnit.getFitness()) {
                 bestUnit = chromosomes[i];
             }
         }
+
         return bestUnit;
     }
 
@@ -47,11 +33,17 @@ public class Population {
         return chromosomes.length;
     }
 
-    public void setChromosome(TestChromosome newUnit, int index) {
+    public void setChromosome(Permutation newUnit, int index) {
         chromosomes[index] = newUnit;
     }
 
-    public TestChromosome getChromosome(int index) {
+    public Permutation getChromosome(int index) {
         return chromosomes[index];
+    }
+
+    public void decodeAllChromosomes() {
+        for (int i = 0; i < chromosomes.length; i++) {
+            Decoder.decode(chromosomes[i]);
+        }
     }
 }
