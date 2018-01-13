@@ -6,16 +6,21 @@ import genetic_algorithm.Population;
 import models.Test;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
 
-    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts1.txt";
+    private static final String GENERIC_INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts";
+    private static final String OUTPUT_FOLDER_PATH = "solutions";
+    private static final int NUMBER_OF_PROBLEMS = 10;
+
+    private static final int ONE_MINUTE = 5*1000;
+    private static final int FIVE_MINUTE = 5 * ONE_MINUTE;
+
 
     public static List<Test> tests;
     public static List<String> machines;
@@ -32,6 +37,8 @@ public class Main {
     private static final String MACHINE_IDENTIFIER = "embedded_board";
     private static final String RESOURCE_IDENTIFIER = "resource";
 
+    private static Permutation best;
+
     /**
      * Hyper parameters
      */
@@ -41,18 +48,42 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(INPUT_FILE_PATH));
-            tests = new ArrayList<>();
-            machines = new ArrayList<>();
-            resourceOccurrences = new HashMap<>();
+            for (int i = 1; i <= NUMBER_OF_PROBLEMS; i++) {
+                List<String> lines = Files.readAllLines(Paths.get(GENERIC_INPUT_FILE_PATH + i + ".txt"));
+                tests = new ArrayList<>();
+                machines = new ArrayList<>();
+                resourceOccurrences = new HashMap<>();
 
-            parse(lines);
+                parse(lines);
 
-            run();
+                Timer timer = new Timer();
+                int finalI = i;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            System.out.println("AAAAAAAAAAAAAA");
+                            printSolutionsInOutputFile(finalI);
+                            System.exit(-1);
+                        } catch (IOException e) {
+                            System.out.print("Error while print to file");
+                            System.exit(-1);
+                        }
+                    }
+                }, ONE_MINUTE);
+
+                run();
+            }
         } catch (IOException | NumberFormatException e) {
             System.out.print("Input file is invalid.");
             System.exit(-1);
         }
+    }
+
+    private static void printSolutionsInOutputFile(int indexOfTask) throws IOException {
+        List<String> lines = Arrays.asList(best.toString());
+        Path file = Paths.get(OUTPUT_FOLDER_PATH + "/res-1m-" + indexOfTask + ".txt");
+        Files.write(file, lines, Charset.forName("UTF-8"));
     }
 
     private static void run() {
@@ -73,8 +104,7 @@ public class Main {
             }
         }
 
-        Permutation best = population.getBestChromosome();
-
+        best = population.getBestChromosome();
 
         System.out.println("FINISHED!");
         System.out.println("Generation: " + iterations);
