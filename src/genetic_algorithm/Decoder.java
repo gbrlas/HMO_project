@@ -90,24 +90,42 @@ public class Decoder {
             }
         }
 
-        List<ScheduleHole> holesThatCanFitOnResources = new ArrayList<>();
         boolean worksOnEveryResource = test.getRequiredResources().size() == 0;
-        for (String holeResource : resourceHoles.keySet()) {
-            if (worksOnEveryResource || test.getRequiredResources().contains(holeResource)) {
-                holesThatCanFitOnResources.addAll(resourceHoles.get(holeResource));
+        if (!worksOnEveryResource) {
+            List<ScheduleHole> holesThatCanFitOnResources = new ArrayList<>();
+            for (String holeResource : resourceHoles.keySet()) {
+                if (test.getRequiredResources().contains(holeResource)) {
+                    holesThatCanFitOnResources.addAll(resourceHoles.get(holeResource));
+                }
             }
-        }
 
-        ScheduleHole resourceHole = findHoleThatSatisfiesAllResourceHoles(holesThatCanFitOnResources);
-        if (resourceHole == null) {
-            return false;
-        }
+            if (holesThatCanFitOnResources.isEmpty()) {
+                return false;
+            }
 
-        for (ScheduleHole holeOnMachine : holesThatCanFitOnMachines) {
-            if (resourceHole.fits(holeOnMachine)) {
-                deleteHole(resourceHole, holeOnMachine, test);
-                solutionPresenters.add(new SolutionPresenter(test.getName(), resourceHole.getStart(), resourceHole.getMachine()));
-                return true;
+            ScheduleHole resourceHole = findHoleThatSatisfiesAllResourceHoles(holesThatCanFitOnResources);
+            if (resourceHole == null) {
+                return false;
+            }
+
+            for (ScheduleHole holeOnMachine : holesThatCanFitOnMachines) {
+                if (resourceHole.fits(holeOnMachine)) {
+                    deleteHole(resourceHole, holeOnMachine, test);
+                    solutionPresenters.add(new SolutionPresenter(test.getName(), resourceHole.getStart(), resourceHole.getMachine()));
+                    return true;
+                }
+            }
+        } else {
+            for (ScheduleHole holeOnMachine : holesThatCanFitOnMachines) {
+                if (holeOnMachine.getDuration() >= test.getDuration()) {
+                    if (holeOnMachine.getDuration() == test.getDuration()) {
+                        machineHoles.get(holeOnMachine.getMachine()).remove(holeOnMachine);
+                    } else {
+                        holeOnMachine.setStart(holeOnMachine.getStart() + test.getDuration());
+                    }
+                    solutionPresenters.add(new SolutionPresenter(test.getName(), holeOnMachine.getStart(), holeOnMachine.getMachine()));
+                    return true;
+                }
             }
         }
 
@@ -119,11 +137,14 @@ public class Decoder {
 
         // remove new holes in resources
         for (String resource : test.getRequiredResources()) {
-            for (ScheduleHole hole : resourceHoles.get(resource)) {
-                List<ScheduleHole> newHoles = newScheduleHoles(resourceHole, hole);
-                resourceHoles.get(resource).remove(hole);
-                if (newHoles != null) {
-                    resourceHoles.get(resource).addAll(newHoles);
+            if (resourceHoles.containsKey(resource)) {
+                List<ScheduleHole> iterationList = new ArrayList<>(resourceHoles.get(resource));
+                for (ScheduleHole hole : iterationList) {
+                    resourceHoles.get(resource).remove(hole);
+                    List<ScheduleHole> newHoles = newScheduleHoles(resourceHole, hole);
+                    if (newHoles != null) {
+                        resourceHoles.get(resource).addAll(newHoles);
+                    }
                 }
             }
         }
@@ -205,7 +226,7 @@ public class Decoder {
             }
         }
 
-        return minimalTimeMachines.get(rand.nextInt(minimalTimeMachines.size()));
+        return minimalTimeMachines.get(0);
     }
 
     private static String findFirstEmptyMachine() {

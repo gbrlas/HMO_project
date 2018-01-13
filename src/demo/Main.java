@@ -36,7 +36,7 @@ public class Main {
      * Hyper parameters
      */
     private static final int MAX_ITERATIONS = 10000;
-    public static final int POPULATION_SIZE = 30;
+    public static final int POPULATION_SIZE = 10;
 
 
     public static void main(String[] args) {
@@ -67,7 +67,7 @@ public class Main {
             population = Algorithm.evolve(population, numberOfTests);
             population.decodeAllChromosomes();
 
-            if (iterations % 100 == 0) {
+            if (iterations % 50 == 0) {
                 System.out.println(population.getBestChromosome().getOutput());
                 System.out.println("Generation: " + iterations + " Fitness: " + population.getBestChromosome().getFitness());
             }
