@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Main {
 
-    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts10.txt";
+    private static final String INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts1.txt";
 
     public static List<Test> tests;
     public static List<String> machines;

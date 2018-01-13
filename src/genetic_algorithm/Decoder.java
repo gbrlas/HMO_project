@@ -1,5 +1,6 @@
 package genetic_algorithm;
 
+import models.ScheduleHole;
 import models.SolutionPresenter;
 import models.Test;
 
@@ -23,6 +24,8 @@ public class Decoder {
      */
     private static Map<String, Integer> resourcesStartBeingAvailable;
 
+    private static Map<String, List<ScheduleHole>> scheduleHolesOnMachines;
+
     private static List<SolutionPresenter> solutionPresenters;
 
     private static Random rand = new Random();
@@ -39,6 +42,7 @@ public class Decoder {
         initializeMap(machines, machinesStartBeingAvailable);
         resourcesStartBeingAvailable = new HashMap<>();
         initializeMap(resourceOccurrences.keySet(), resourcesStartBeingAvailable);
+        scheduleHolesOnMachines = new HashMap<>();
 
         solutionPresenters = new ArrayList<>();
 
@@ -53,13 +57,12 @@ public class Decoder {
             }
 
             int testStartingTime = machinesStartBeingAvailable.get(machine);
-            if (test.getRequiredResources().size() == 0) {
-                machinesStartBeingAvailable.put(machine, testStartingTime + test.getDuration());
-            } else {
+            if (test.getRequiredResources().size() != 0) {
                 testStartingTime = findTimeWithFreeResources(test, testStartingTime);
             }
 
             tempDuration = testStartingTime + test.getDuration();
+            machinesStartBeingAvailable.put(machine, tempDuration);
             if (tempDuration > totalDuration) {
                 totalDuration = tempDuration;
             }
