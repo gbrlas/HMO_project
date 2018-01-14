@@ -1,5 +1,6 @@
 package demo;
 
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import genetic_algorithm.Algorithm;
 import genetic_algorithm.Permutation;
 import genetic_algorithm.Population;
@@ -37,8 +38,9 @@ public class Main {
     private static Permutation best;
 
     private static int i;
-    private static double fitnessAtOneMinute;
-    private static double fitnessAtFiveMinutes;
+    private static ArrayList<Double> fitnessAtOneMinute = new ArrayList<>();
+    private static ArrayList<Double> fitnessAtFiveMinutes = new ArrayList<>();
+    private static ArrayList<Double> fitnessAtEnd = new ArrayList<>();
 
     /**
      * Hyper parameters
@@ -64,7 +66,7 @@ public class Main {
                     public void run() {
                         String fileName = OUTPUT_FOLDER_PATH + "res-1m-ts" + i + ".txt";
                         try {
-                            fitnessAtOneMinute = best.getFitness();
+                            fitnessAtOneMinute.add(best.getFitness());
                             printSolutionsInOutputFile(fileName);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -78,7 +80,7 @@ public class Main {
                     public void run() {
                         String fileName = OUTPUT_FOLDER_PATH + "res-5m-ts" + i + ".txt";
                         try {
-                            fitnessAtFiveMinutes = best.getFitness();
+                            fitnessAtFiveMinutes.add(best.getFitness());
                             printSolutionsInOutputFile(fileName);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -138,6 +140,7 @@ public class Main {
         System.out.println("Genome:");
         System.out.println(best.getOutput());
         System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
+        fitnessAtEnd.add(best.getFitness());
         System.out.println("Fitness at 1 minute mark: " + fitnessAtOneMinute);
         System.out.println("Fitness at 5 minute mark: " + fitnessAtFiveMinutes + "\n\n");
 
