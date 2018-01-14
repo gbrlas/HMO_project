@@ -1,7 +1,5 @@
 package genetic_algorithm;
 
-import demo.Main;
-import models.ScheduleHole;
 import models.SolutionPresenter;
 import models.Test;
 

@@ -17,7 +17,7 @@ public class Main {
 
     private static final String GENERIC_INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts";
     private static final String OUTPUT_FOLDER_PATH = "solutions/";
-    private static final int NUMBER_OF_PROBLEMS = 10;
+    private static final int NUMBER_OF_PROBLEMS = 20;
 
     private static final int ONE_MINUTE = 60 * 1000;
     private static final int FIVE_MINUTES = 5 * ONE_MINUTE;
@@ -27,7 +27,7 @@ public class Main {
     public static List<String> machines;
     public static Map<String, Integer> resourceOccurrences;
 
-    public static int numberOfTests;
+    private static int numberOfTests;
 
     private static final String TEST_NUMBER_KEY = "tests";
     private static final String TEST_IDENTIFIER = "test";
@@ -46,7 +46,7 @@ public class Main {
      * Hyper parameters
      */
     private static final int MAX_ITERATIONS = 30;
-    public static final int POPULATION_SIZE = 50;
+    public static final int POPULATION_SIZE = 10;
 
 
     public static void main(String[] args) {

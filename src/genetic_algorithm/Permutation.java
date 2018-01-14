@@ -34,10 +34,6 @@ public class Permutation {
         return permutation;
     }
 
-    private int getValue(int i) {
-        return permutation[i];
-    }
-
     private int getSize() {
         return permutation.length;
     }
@@ -132,18 +128,6 @@ public class Permutation {
         return splits;
     }
 
-    private ArrayList<Integer> getSplits2(int n, int parts) {
-        ArrayList<Integer> ret = new ArrayList<>();
-        int step = n / parts;
-        int curr = step;
-        while (curr <= n) {
-            ret.add(curr);
-            curr += step;
-        }
-
-        return ret;
-    }
-
     private void translateDuplicates(int[] p,
                                      HashMap<Integer, Integer> mapping,
                                      boolean[] changed) {
@@ -156,30 +140,6 @@ public class Permutation {
         }
     }
 
-    /**
-     * Checks whether permutation has 2 same values
-     *
-     * @return
-     */
-    public boolean isValid() {
-        HashMap<Integer, Integer> bucket = new HashMap<>();
-
-        for (int aPermutation : permutation) {
-            if (bucket.containsKey(aPermutation))
-                return false;
-            bucket.put(aPermutation, 1);
-        }
-        return true;
-    }
-
-    public boolean equals(Permutation second) {
-        for (int i = 0; i < permutation.length; ++i) {
-            if (permutation[i] != second.getValue(i))
-                return false;
-        }
-        return true;
-    }
-
     public String toString() {
         StringBuilder ret = new StringBuilder("[");
         for (int aPermutation : permutation) {
@@ -188,7 +148,7 @@ public class Permutation {
         return ret.substring(0, ret.length() - 2) + "]";
     }
 
-    public void setFitness(int fitness) {
+    void setFitness(int fitness) {
         this.fitness = fitness;
     }
 
@@ -200,7 +160,7 @@ public class Permutation {
         return output;
     }
 
-    public void setOutput(String output) {
+    void setOutput(String output) {
         this.output = output;
     }
 }
