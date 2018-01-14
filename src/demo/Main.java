@@ -27,7 +27,7 @@ public class Main {
     public static List<String> machines;
     public static Map<String, Integer> resourceOccurrences;
 
-    private static int numberOfTests;
+    public static int numberOfTests;
 
     private static final String TEST_NUMBER_KEY = "tests";
     private static final String TEST_IDENTIFIER = "test";
@@ -45,13 +45,13 @@ public class Main {
     /**
      * Hyper parameters
      */
-    private static final int MAX_ITERATIONS = 20000;
-    public static final int POPULATION_SIZE = 10;
+    private static final int MAX_ITERATIONS = 50;
+    public static final int POPULATION_SIZE = 20;
 
 
     public static void main(String[] args) {
         try {
-            for (i = 1; i <= 1; i++) {
+            for (i = 10; i <= NUMBER_OF_PROBLEMS; i++) {
                 String inputFileName = GENERIC_INPUT_FILE_PATH + i + ".txt";
                 List<String> lines = Files.readAllLines(Paths.get(inputFileName));
                 tests = new ArrayList<>();
@@ -127,10 +127,13 @@ public class Main {
 
             best = population.getBestChromosome();
 
-            if (iterations % 50 == 0) {
+            /*if (iterations % 50 == 0) {
                 System.out.println(population.getBestChromosome().getOutput());
                 System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
-            }
+            }*/
+
+            System.out.println(population.getBestChromosome().getOutput());
+            System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
         }
 
         best = population.getBestChromosome();
