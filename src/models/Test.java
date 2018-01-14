@@ -20,22 +20,6 @@ public class Test {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public void setRequiredMachines(List<String> requiredMachines) {
-        this.requiredMachines = requiredMachines;
-    }
-
-    public void setRequiredResources(List<String> requiredResources) {
-        this.requiredResources = requiredResources;
-    }
-
     public List<String> getRequiredResources() {
         return requiredResources;
     }
@@ -64,11 +48,10 @@ public class Test {
 
         Test test = (Test) o;
 
-        if (duration != test.duration) return false;
-        if (name != null ? !name.equals(test.name) : test.name != null) return false;
-        if (requiredMachines != null ? !requiredMachines.equals(test.requiredMachines) : test.requiredMachines != null)
-            return false;
-        return requiredResources != null ? requiredResources.equals(test.requiredResources) : test.requiredResources == null;
+        return duration == test.duration
+                && (name != null ? name.equals(test.name) : test.name == null)
+                && (requiredMachines != null ? requiredMachines.equals(test.requiredMachines) : test.requiredMachines == null)
+                && (requiredResources != null ? requiredResources.equals(test.requiredResources) : test.requiredResources == null);
     }
 
     @Override

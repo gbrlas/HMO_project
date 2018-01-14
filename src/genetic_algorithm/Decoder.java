@@ -10,7 +10,7 @@ import static demo.Main.machines;
 import static demo.Main.resourceOccurrences;
 import static demo.Main.tests;
 
-public class Decoder {
+class Decoder {
 
     /**
      * For given machine, map returns value of time unit
@@ -29,13 +29,11 @@ public class Decoder {
 
     private static List<SolutionPresenter> solutionPresenters;
 
-    private static Random rand = new Random();
-
 
     /**
      * Returns length of decoded solution.
      */
-    public static void decode(Permutation chromosome) {
+    static void decode(Permutation chromosome) {
         int totalDuration = 0;
         int tempDuration;
 

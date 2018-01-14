@@ -20,30 +20,30 @@ public class Population {
      */
     public Permutation getBestChromosome() {
         Permutation bestUnit = chromosomes[0];
-        for (int i = 0; i < chromosomes.length; i++) {
-            if (chromosomes[i].getFitness() < bestUnit.getFitness()) {
-                bestUnit = chromosomes[i];
+        for (Permutation chromosome : chromosomes) {
+            if (chromosome.getFitness() < bestUnit.getFitness()) {
+                bestUnit = chromosome;
             }
         }
 
         return bestUnit;
     }
 
-    public int getPopulationSize() {
+    int getPopulationSize() {
         return chromosomes.length;
     }
 
-    public void setChromosome(Permutation newUnit, int index) {
+    void setChromosome(Permutation newUnit, int index) {
         chromosomes[index] = newUnit;
     }
 
-    public Permutation getChromosome(int index) {
+    Permutation getChromosome(int index) {
         return chromosomes[index];
     }
 
     public void decodeAllChromosomes() {
-        for (int i = 0; i < chromosomes.length; i++) {
-            Decoder.decode(chromosomes[i]);
+        for (Permutation chromosome : chromosomes) {
+            Decoder.decode(chromosome);
         }
     }
 }

@@ -8,7 +8,7 @@ public class Permutation {
     private int fitness;
     private String output;
 
-    public Permutation(int n) {
+    Permutation(int n) {
         permutation = new int[n];
 
         ArrayList<Integer> numbers = new ArrayList<>();
@@ -30,19 +30,19 @@ public class Permutation {
         }
     }
 
-    public int[] getPermutation() {
+    int[] getPermutation() {
         return permutation;
     }
 
-    public int getValue(int i) {
+    private int getValue(int i) {
         return permutation[i];
     }
 
-    public int getSize() {
+    private int getSize() {
         return permutation.length;
     }
 
-    public Permutation[] crossover(Permutation second) {
+    Permutation[] crossover(Permutation second) {
         if (permutation.length != second.getSize()) {
             throw new IllegalArgumentException("Permutation size does not match");
         }

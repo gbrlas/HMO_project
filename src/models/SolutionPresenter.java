@@ -12,30 +12,6 @@ public class SolutionPresenter {
         this.testName = testName;
     }
 
-    public int getStartingTime() {
-        return startingTime;
-    }
-
-    public void setStartingTime(int startingTime) {
-        this.startingTime = startingTime;
-    }
-
-    public String getMachine() {
-        return machine;
-    }
-
-    public void setMachine(String machine) {
-        this.machine = machine;
-    }
-
-    public String getTestName() {
-        return testName;
-    }
-
-    public void setTestName(String testName) {
-        this.testName = testName;
-    }
-
     @Override
     public String toString() {
         return String.format("\'%s\',%d,\'%s\'.\n", testName, startingTime, machine);
