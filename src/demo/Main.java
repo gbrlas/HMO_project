@@ -1,6 +1,5 @@
 package demo;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import genetic_algorithm.Algorithm;
 import genetic_algorithm.Permutation;
 import genetic_algorithm.Population;
@@ -20,7 +19,7 @@ public class Main {
     private static final String OUTPUT_FOLDER_PATH = "solutions/";
     private static final int NUMBER_OF_PROBLEMS = 10;
 
-    private static final int ONE_MINUTE = 60 * 1000;
+    private static final int ONE_MINUTE = 5000;
     private static final int FIVE_MINUTES = 5 * ONE_MINUTE;
 
 
@@ -37,10 +36,11 @@ public class Main {
 
     private static Permutation best;
 
+    private static double fitnessAtOneMinute;
+    private static double fitnessAtFiveMinutes;
+    private static double fitnessAtIterationsFinished;
+
     private static int i;
-    private static ArrayList<Double> fitnessAtOneMinute = new ArrayList<>();
-    private static ArrayList<Double> fitnessAtFiveMinutes = new ArrayList<>();
-    private static ArrayList<Double> fitnessAtEnd = new ArrayList<>();
 
     /**
      * Hyper parameters
@@ -51,7 +51,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            for (i = 1; i <= NUMBER_OF_PROBLEMS; i++) {
+            for (i = 1; i <= 1; i++) {
                 String inputFileName = GENERIC_INPUT_FILE_PATH + i + ".txt";
                 List<String> lines = Files.readAllLines(Paths.get(inputFileName));
                 tests = new ArrayList<>();
@@ -66,27 +66,27 @@ public class Main {
                     public void run() {
                         String fileName = OUTPUT_FOLDER_PATH + "res-1m-ts" + i + ".txt";
                         try {
-                            fitnessAtOneMinute.add(best.getFitness());
                             printSolutionsInOutputFile(fileName);
+                            fitnessAtOneMinute = best.getFitness();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 }, ONE_MINUTE);
 
-                // write after 5 minutes
+               /* // write after 5 minutes
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         String fileName = OUTPUT_FOLDER_PATH + "res-5m-ts" + i + ".txt";
                         try {
-                            fitnessAtFiveMinutes.add(best.getFitness());
                             printSolutionsInOutputFile(fileName);
+                            fitnessAtFiveMinutes = best.getFitness();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
-                }, FIVE_MINUTES);
+                }, FIVE_MINUTES);*/
 
                 String fileNameWithoutTimeLimits = OUTPUT_FOLDER_PATH + "res-ne-ts" + i + ".txt";
 
@@ -134,19 +134,34 @@ public class Main {
         }
 
         best = population.getBestChromosome();
+        fitnessAtIterationsFinished = best.getFitness();
 
         System.out.println("FINISHED!");
         System.out.println("Generation: " + iterations);
         System.out.println("Genome:");
         System.out.println(best.getOutput());
         System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
-        fitnessAtEnd.add(best.getFitness());
-        System.out.println("Fitness at 1 minute mark: " + fitnessAtOneMinute);
-        System.out.println("Fitness at 5 minute mark: " + fitnessAtFiveMinutes + "\n\n");
 
 
         try {
             printSolutionsInOutputFile(fileName);
+            printFitnessInFile(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void printFitnessInFile(String fileName) {
+        File file = new File(OUTPUT_FOLDER_PATH + "fitnesses.txt");
+
+        FileWriter outFile;
+        try {
+            outFile = new FileWriter(file, true);
+            final PrintWriter out = new PrintWriter(outFile);
+            String output = fileName + "\n" + "1 minute: " + fitnessAtOneMinute + "\n" + "5 minutes: "
+                    + fitnessAtFiveMinutes + "\n" + "Final fitness: " + fitnessAtIterationsFinished + "\n";
+            out.println(output);
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

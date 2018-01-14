@@ -50,7 +50,7 @@ class Decoder {
         for (int gene : chromosome.getPermutation()) {
             Test test = tests.get(gene);
 
-            if (foundAHole(test)) {
+            if (fitsAHole(test)) {
                 continue;
             }
 
@@ -79,7 +79,7 @@ class Decoder {
         chromosome.setOutput(getSolutionOutput());
     }
 
-    private static boolean foundAHole(Test test) {
+    private static boolean fitsAHole(Test test) {
         List<ScheduleHole> holesThatCanFitOnMachines = new ArrayList<>();
         boolean worksOnEveryMachine = test.getRequiredMachines().size() == 0;
         for (String holeMachine : machineHoles.keySet()) {
@@ -217,14 +217,13 @@ class Decoder {
             }
         }
 
-        List<String> minimalTimeMachines = new ArrayList<>();
-        for (Map.Entry<String, Integer> machineAndStartingTime : machinesStartBeingAvailable.entrySet()) {
-            if (machineAndStartingTime.getValue() == minimalTime) {
-                minimalTimeMachines.add(machineAndStartingTime.getKey());
+        for (String machine : requiredMachines) {
+            if (machinesStartBeingAvailable.get(machine) == minimalTime) {
+                return machine;
             }
         }
 
-        return minimalTimeMachines.get(0);
+        return null;
     }
 
     private static String findFirstEmptyMachine() {
@@ -281,8 +280,6 @@ class Decoder {
         ScheduleHole hole;
         if (startOfResourcesBeingAvailable > testStartingTime) {
             hole = new ScheduleHole(testStartingTime, startOfResourcesBeingAvailable, machine, resource);
-        } else if (startOfResourcesBeingAvailable < testStartingTime) {
-            hole = new ScheduleHole(startOfResourcesBeingAvailable, testStartingTime, machine, resource);
         } else {
             return;
         }
