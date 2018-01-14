@@ -45,13 +45,13 @@ public class Main {
     /**
      * Hyper parameters
      */
-    private static final int MAX_ITERATIONS = 50;
-    public static final int POPULATION_SIZE = 20;
+    private static final int MAX_ITERATIONS = 30;
+    public static final int POPULATION_SIZE = 50;
 
 
     public static void main(String[] args) {
         try {
-            for (i = 10; i <= NUMBER_OF_PROBLEMS; i++) {
+            for (i = 1; i <= NUMBER_OF_PROBLEMS; i++) {
                 String inputFileName = GENERIC_INPUT_FILE_PATH + i + ".txt";
                 List<String> lines = Files.readAllLines(Paths.get(inputFileName));
                 tests = new ArrayList<>();
