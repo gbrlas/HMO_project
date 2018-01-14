@@ -19,7 +19,7 @@ public class Main {
     private static final String OUTPUT_FOLDER_PATH = "solutions/";
     private static final int NUMBER_OF_PROBLEMS = 10;
 
-    private static final int ONE_MINUTE = 5000;
+    private static final int ONE_MINUTE = 60 * 1000;
     private static final int FIVE_MINUTES = 5 * ONE_MINUTE;
 
 
@@ -74,7 +74,7 @@ public class Main {
                     }
                 }, ONE_MINUTE);
 
-               /* // write after 5 minutes
+                // write after 5 minutes
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -86,7 +86,7 @@ public class Main {
                             e.printStackTrace();
                         }
                     }
-                }, FIVE_MINUTES);*/
+                }, FIVE_MINUTES);
 
                 String fileNameWithoutTimeLimits = OUTPUT_FOLDER_PATH + "res-ne-ts" + i + ".txt";
 

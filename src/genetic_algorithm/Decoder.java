@@ -246,7 +246,7 @@ class Decoder {
         int finalStartTime = Math.max(startOfResourcesBeingAvailable,
                 testStartingTime);
 
-        checkIfMachineHoleIsCreated(startOfResourcesBeingAvailable, testStartingTime, machine, currentResource);
+        checkIfMachineHoleIsCreated(requiredResources, testStartingTime, machine);
         checkIfResourceHoleIsCreated(finalStartTime, test, machine);
 
         for (String resource : requiredResources) {
@@ -275,20 +275,21 @@ class Decoder {
         }
     }
 
-    private static void checkIfMachineHoleIsCreated(int startOfResourcesBeingAvailable,
-                                                    int testStartingTime, String machine, String resource) {
+    private static void checkIfMachineHoleIsCreated(List<String> usedResources, int testStartingTime, String machine) {
         ScheduleHole hole;
-        if (startOfResourcesBeingAvailable > testStartingTime) {
-            hole = new ScheduleHole(testStartingTime, startOfResourcesBeingAvailable, machine, resource);
-        } else {
-            return;
-        }
+        for (String resource : usedResources) {
+            if (resourcesStartBeingAvailable.get(resource) < testStartingTime) {
+                hole = new ScheduleHole(resourcesStartBeingAvailable.get(resource), testStartingTime, machine, resource);
+            } else {
+                return;
+            }
 
-        if (!machineHoles.containsKey(machine)) {
-            machineHoles.put(machine, new ArrayList<>());
-        }
+            if (!machineHoles.containsKey(machine)) {
+                machineHoles.put(machine, new ArrayList<>());
+            }
 
-        machineHoles.get(machine).add(hole);
+            machineHoles.get(machine).add(hole);
+        }
     }
 
 
