@@ -1,0 +1,50 @@
+solutions/res-ne-ts1.txt
+1 minute: 41563.0
+5 minutes: 41447.0
+Final fitness: 40746.0
+
+solutions/res-ne-ts2.txt
+1 minute: 37872.0
+5 minutes: 37137.0
+Final fitness: 37137.0
+
+solutions/res-ne-ts3.txt
+1 minute: 40275.0
+5 minutes: 39840.0
+Final fitness: 39633.0
+
+solutions/res-ne-ts4.txt
+1 minute: 35437.0
+5 minutes: 35021.0
+Final fitness: 34811.0
+
+solutions/res-ne-ts5.txt
+1 minute: 41805.0
+5 minutes: 41516.0
+Final fitness: 41132.0
+
+solutions/res-ne-ts6.txt
+1 minute: 45343.0
+5 minutes: 45343.0
+Final fitness: 45117.0
+
+solutions/res-ne-ts7.txt
+1 minute: 40942.0
+5 minutes: 40931.0
+Final fitness: 40406.0
+
+solutions/res-ne-ts8.txt
+1 minute: 45043.0
+5 minutes: 44792.0
+Final fitness: 43930.0
+
+solutions/res-ne-ts9.txt
+1 minute: 41670.0
+5 minutes: 41529.0
+Final fitness: 40962.0
+
+solutions/res-ne-ts10.txt
+1 minute: 33116.0
+5 minutes: 32856.0
+Final fitness: 32537.0
+
