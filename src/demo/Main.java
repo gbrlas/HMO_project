@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Main {
 
-    private static final String GENERIC_INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/ts";
+    private static final String GENERIC_INPUT_FILE_PATH = "Instance_Rasporedjivanje_testova/";
     private static final String OUTPUT_FOLDER_PATH = "solutions/";
     private static final int NUMBER_OF_PROBLEMS = 20;
 
@@ -45,14 +45,14 @@ public class Main {
     /**
      * Hyper parameters
      */
-    private static final int MAX_ITERATIONS = 30;
-    public static final int POPULATION_SIZE = 10;
+    private static final int MAX_ITERATIONS = 200;
+    public static final int POPULATION_SIZE = 35;
 
 
     public static void main(String[] args) {
         try {
-            for (i = 1; i <= NUMBER_OF_PROBLEMS; i++) {
-                String inputFileName = GENERIC_INPUT_FILE_PATH + i + ".txt";
+            for (i = 1; i <= 1; i++) {
+                String inputFileName = GENERIC_INPUT_FILE_PATH + "labos.txt";
                 List<String> lines = Files.readAllLines(Paths.get(inputFileName));
                 tests = new ArrayList<>();
                 machines = new ArrayList<>();
@@ -64,7 +64,7 @@ public class Main {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        String fileName = OUTPUT_FOLDER_PATH + "res-1m-ts" + i + ".txt";
+                        String fileName = OUTPUT_FOLDER_PATH + "res-1m-ts-labos.txt";
                         try {
                             printSolutionsInOutputFile(fileName);
                             fitnessAtOneMinute = best.getFitness();
@@ -78,7 +78,7 @@ public class Main {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        String fileName = OUTPUT_FOLDER_PATH + "res-5m-ts" + i + ".txt";
+                        String fileName = OUTPUT_FOLDER_PATH + "res-5m-ts-labos.txt";
                         try {
                             printSolutionsInOutputFile(fileName);
                             fitnessAtFiveMinutes = best.getFitness();
@@ -88,7 +88,7 @@ public class Main {
                     }
                 }, FIVE_MINUTES);
 
-                String fileNameWithoutTimeLimits = OUTPUT_FOLDER_PATH + "res-ne-ts" + i + ".txt";
+                String fileNameWithoutTimeLimits = OUTPUT_FOLDER_PATH + "res-ne-ts-labos.txt";
 
                 System.out.println("Size of population: " + POPULATION_SIZE + "\n");
                 System.out.println("Input file: " + inputFileName);
@@ -132,7 +132,7 @@ public class Main {
                 System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
             }*/
 
-            System.out.println(population.getBestChromosome().getOutput());
+            //System.out.println(population.getBestChromosome().getOutput());
             System.out.println("Generation: " + iterations + " Fitness: " + best.getFitness());
         }
 

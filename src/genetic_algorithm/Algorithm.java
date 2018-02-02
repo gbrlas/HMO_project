@@ -7,7 +7,7 @@ public class Algorithm {
     /**
      *  GA parameters
      */
-    static double mutation = 1;
+    static double mutation = 2;
     private static final int sizeOfTournamentSelection = 4;
     private static final boolean elitism = true;
 
